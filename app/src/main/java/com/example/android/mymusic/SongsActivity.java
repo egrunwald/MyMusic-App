@@ -1,0 +1,128 @@
+package com.example.android.mymusic;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+
+public class SongsActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_songs);
+
+        // Find the view that sets the songs list
+        TextView recentSongs = (TextView) findViewById(R.id.recent_nav_text_view);
+
+        // Set the on click listener for the view
+        recentSongs.setOnClickListener(new View.OnClickListener() {
+
+            // The code in this method will be executed when the songs_nav_text_view View is clicked on.
+            @Override
+            public void onClick(View view) {
+
+                // Create a new intent to open the {@link SongsActivity}
+                Intent recentIntent = new Intent(SongsActivity.this, MainActivity.class);
+
+                // Start the new activity
+                startActivity(recentIntent);
+            }
+        });
+
+        // Find the view that sets the audio player
+        TextView player = (TextView) findViewById(R.id.player_nav_text_view);
+
+        // Set the on click listener for the view
+        player.setOnClickListener(new View.OnClickListener() {
+
+            // The code in this method will be executed when the player_nav_text_view View is clicked on.
+            @Override
+            public void onClick(View view) {
+
+                // Create a new intent to open the {@link PlayerActivity}
+                Intent playerIntent = new Intent(SongsActivity.this, PlayerActivity.class);
+
+                // Start the new activity
+                startActivity(playerIntent);
+            }
+        });
+        // create an empty ArrayList of Song to be filled later
+        ArrayList<Song> songDataList = new ArrayList<Song>();
+
+        // create an ArrayList of song integer ids for songs in raw resource file
+        ArrayList<Integer> listOfSongs = new ArrayList<Integer>();
+        listOfSongs.add(R.raw.computer_music_all_stars_clueless);
+        listOfSongs.add(R.raw.computer_music_all_stars_may_the_chords_be_with_you);
+        listOfSongs.add(R.raw.dancefloor_is_lava_drown_in_noise);
+        listOfSongs.add(R.raw.dancefloor_is_lava_control);
+        listOfSongs.add(R.raw.dancefloor_is_lava_why_oh_you_are_love);
+        listOfSongs.add(R.raw.jens_east_galaxies_ft_diandra_faye);
+        listOfSongs.add(R.raw.jens_east_nightrise);
+        listOfSongs.add(R.raw.camilla_north_x_jens_east_invisible);
+        listOfSongs.add(R.raw.juanitos_del_carnaval);
+        listOfSongs.add(R.raw.tintamare_propane);
+
+
+        // for each song in listIfSong retrieve metadata and save as Song in songDataList
+        for (int i = 0; i < listOfSongs.size(); i++) {
+            Uri mediaPath = Uri.parse("android.resource://" + getPackageName() + "/" + listOfSongs.get(i));
+            MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+            mmr.setDataSource(this, mediaPath);
+            int fileAddress = i;
+            String songTitle = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+            String songArtist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+            Drawable albumArt;
+            byte[] songImage = mmr.getEmbeddedPicture();
+            if (songImage != null) {
+                ByteArrayInputStream is = new ByteArrayInputStream(songImage);
+                albumArt = Drawable.createFromStream(is, "AlbumArt");
+            } else {
+                albumArt = null;
+            }
+            Song thisSong = new Song(fileAddress, songTitle, songArtist, albumArt);
+            songDataList.add(thisSong);
+        }
+
+        // Create an {@link SongTextAdapter}, whose data source is a list of Strings and images. The
+        // adapter knows how to create layouts for each item in the list, using the
+        // list_item.xml layout resource defined in the Android framework.
+        // This list item layout contains two {@link TextView} and one {@link ImageView},
+        // which the adapter will set to display song title, song artist and a image
+        SongTextAdapter adapter = new SongTextAdapter(this, songDataList);
+
+        // Find the {@link ListView} object in the view hierarchy of the {@link Activity}.
+        // There should be a {@link ListView} with the view ID called songs_list,
+        // which is declared in the activity_songs.xml layout file.
+        ListView listView = (ListView) findViewById(R.id.songs_list);
+
+        // Make the {@link ListView} use the {@link SongTextAdapter} we created above, so that the
+        // {@link ListView} will display list items for each word in the list of words.
+        // Do this by calling the setAdapter method on the {@link ListView} object and pass in
+        // 1 argument, which is the {@link SongTextAdapter} with the variable name adapter.
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Song currentSong = adapter.getItem(position);
+                int songAddress = currentSong.getFileAddress();
+
+                Intent intent = new Intent(SongsActivity.this, PlayerActivity.class);
+                intent.putExtra("songAddress", songAddress);
+                startActivity(intent);
+            }
+        });
+    }
+}
