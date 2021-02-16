@@ -23,64 +23,22 @@ public class SongsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_songs);
 
-        // Find the view that sets the songs list
-        TextView recentSongs = (TextView) findViewById(R.id.recent_nav_text_view);
+        Intent intent = getIntent();
+        ArrayList<Integer> playedList = (ArrayList<Integer>) intent.getIntegerArrayListExtra("recentPlayed");
 
-        // Set the on click listener for the view
-        recentSongs.setOnClickListener(new View.OnClickListener() {
-
-            // The code in this method will be executed when the songs_nav_text_view View is clicked on.
-            @Override
-            public void onClick(View view) {
-
-                // Create a new intent to open the {@link SongsActivity}
-                Intent recentIntent = new Intent(SongsActivity.this, MainActivity.class);
-
-                // Start the new activity
-                startActivity(recentIntent);
-            }
-        });
-
-        // Find the view that sets the audio player
-        TextView player = (TextView) findViewById(R.id.player_nav_text_view);
-
-        // Set the on click listener for the view
-        player.setOnClickListener(new View.OnClickListener() {
-
-            // The code in this method will be executed when the player_nav_text_view View is clicked on.
-            @Override
-            public void onClick(View view) {
-
-                // Create a new intent to open the {@link PlayerActivity}
-                Intent playerIntent = new Intent(SongsActivity.this, PlayerActivity.class);
-
-                // Start the new activity
-                startActivity(playerIntent);
-            }
-        });
         // create an empty ArrayList of Song to be filled later
         ArrayList<Song> songDataList = new ArrayList<Song>();
 
         // create an ArrayList of song integer ids for songs in raw resource file
-        ArrayList<Integer> listOfSongs = new ArrayList<Integer>();
-        listOfSongs.add(R.raw.computer_music_all_stars_clueless);
-        listOfSongs.add(R.raw.computer_music_all_stars_may_the_chords_be_with_you);
-        listOfSongs.add(R.raw.dancefloor_is_lava_drown_in_noise);
-        listOfSongs.add(R.raw.dancefloor_is_lava_control);
-        listOfSongs.add(R.raw.dancefloor_is_lava_why_oh_you_are_love);
-        listOfSongs.add(R.raw.jens_east_galaxies_ft_diandra_faye);
-        listOfSongs.add(R.raw.jens_east_nightrise);
-        listOfSongs.add(R.raw.camilla_north_x_jens_east_invisible);
-        listOfSongs.add(R.raw.juanitos_del_carnaval);
-        listOfSongs.add(R.raw.tintamare_propane);
-
+        SongList songList = new SongList();
+        ArrayList<Integer> listOfSongs = songList.getSongList();
 
         // for each song in listIfSong retrieve metadata and save as Song in songDataList
         for (int i = 0; i < listOfSongs.size(); i++) {
-            Uri mediaPath = Uri.parse("android.resource://" + getPackageName() + "/" + listOfSongs.get(i));
+            int fileAddress = listOfSongs.get(i);
+            Uri mediaPath = Uri.parse("android.resource://" + getPackageName() + "/" + fileAddress);
             MediaMetadataRetriever mmr = new MediaMetadataRetriever();
             mmr.setDataSource(this, mediaPath);
-            int fileAddress = i;
             String songTitle = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
             String songArtist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
             Drawable albumArt;
@@ -121,7 +79,48 @@ public class SongsActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(SongsActivity.this, PlayerActivity.class);
                 intent.putExtra("songAddress", songAddress);
+                intent.putExtra("recentPlayed", playedList);
                 startActivity(intent);
+            }
+        });
+
+        // Find the view that sets the songs list
+        TextView recentSongs = (TextView) findViewById(R.id.recent_nav_text_view);
+
+        // Set the on click listener for the view
+        recentSongs.setOnClickListener(new View.OnClickListener() {
+
+            // The code in this method will be executed when the songs_nav_text_view View is clicked on.
+            @Override
+            public void onClick(View view) {
+
+                // Create a new intent to open the {@link SongsActivity}
+                Intent recentIntent = new Intent(SongsActivity.this, MainActivity.class);
+                recentIntent.putExtra("recentPlayed", playedList);
+
+                // Start the new activity
+                startActivity(recentIntent);
+            }
+        });
+
+        // Find the view that sets the audio player
+        TextView player = (TextView) findViewById(R.id.player_nav_text_view);
+
+        // Set the on click listener for the view
+        player.setOnClickListener(new View.OnClickListener() {
+
+            // The code in this method will be executed when the player_nav_text_view View is clicked on.
+            @Override
+            public void onClick(View view) {
+                int lastSong = playedList.get(playedList.size() - 1);
+
+                // Create a new intent to open the {@link PlayerActivity}
+                Intent playerIntent = new Intent(SongsActivity.this, PlayerActivity.class);
+                playerIntent.putExtra("songAddress", lastSong);
+                playerIntent.putExtra("recentPlayed", playedList);
+
+                // Start the new activity
+                startActivity(playerIntent);
             }
         });
     }
