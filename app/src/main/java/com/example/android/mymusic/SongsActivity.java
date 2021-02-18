@@ -1,6 +1,5 @@
 package com.example.android.mymusic;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
@@ -10,9 +9,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 
@@ -23,8 +22,17 @@ public class SongsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_songs);
 
+        // Create empty ArrayList to fill with played songs list.
+        ArrayList<Integer> playedList  = new ArrayList<Integer>();
+
+        // Get recent playedList from intent when SongActivity opened from
+        // another Activity.
         Intent intent = getIntent();
-        ArrayList<Integer> playedList = (ArrayList<Integer>) intent.getIntegerArrayListExtra("recentPlayed");
+
+        // If intent contains a list of recentPlayed songs add them to playedList.
+        if (intent.getIntegerArrayListExtra("recentPlayed") != null) {
+            playedList.addAll(intent.getIntegerArrayListExtra("recentPlayed"));
+        }
 
         // create an empty ArrayList of Song to be filled later
         ArrayList<Song> songDataList = new ArrayList<Song>();
@@ -71,6 +79,7 @@ public class SongsActivity extends AppCompatActivity {
         // 1 argument, which is the {@link SongTextAdapter} with the variable name adapter.
         listView.setAdapter(adapter);
 
+        // Set click listener for the adapter view
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -79,7 +88,9 @@ public class SongsActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(SongsActivity.this, PlayerActivity.class);
                 intent.putExtra("songAddress", songAddress);
-                intent.putExtra("recentPlayed", playedList);
+                if (playedList.get(0) != -1) {
+                    intent.putExtra("recentPlayed", playedList);
+                }
                 startActivity(intent);
             }
         });
@@ -96,7 +107,9 @@ public class SongsActivity extends AppCompatActivity {
 
                 // Create a new intent to open the {@link SongsActivity}
                 Intent recentIntent = new Intent(SongsActivity.this, MainActivity.class);
-                recentIntent.putExtra("recentPlayed", playedList);
+                if (playedList.get(0) != -1) {
+                    recentIntent.putExtra("recentPlayed", playedList);
+                }
 
                 // Start the new activity
                 startActivity(recentIntent);
@@ -114,13 +127,18 @@ public class SongsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int lastSong = playedList.get(playedList.size() - 1);
 
-                // Create a new intent to open the {@link PlayerActivity}
-                Intent playerIntent = new Intent(SongsActivity.this, PlayerActivity.class);
-                playerIntent.putExtra("songAddress", lastSong);
-                playerIntent.putExtra("recentPlayed", playedList);
+                if (lastSong != -1) {
+                    // Create a new intent to open the {@link PlayerActivity}
+                    Intent playerIntent = new Intent(SongsActivity.this, PlayerActivity.class);
+                    playerIntent.putExtra("songAddress", lastSong);
+                    playerIntent.putExtra("recentPlayed", playedList);
 
-                // Start the new activity
-                startActivity(playerIntent);
+                    // Start the new activity
+                    startActivity(playerIntent);
+                } else {
+                    Toast.makeText(SongsActivity.this, "No recently played songs,\n" +
+                            "please select a song to play!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

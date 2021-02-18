@@ -6,8 +6,6 @@ public class SongList extends ArrayList<Integer> {
 
     private ArrayList<Integer> listOfSongs = new ArrayList<Integer>();
 
-    private ArrayList<Integer> listOfRecentSongs = new ArrayList<Integer>();
-
     public SongList() {
 
         // create an ArrayList of song integer ids for songs in raw resource file
@@ -28,15 +26,4 @@ public class SongList extends ArrayList<Integer> {
         return listOfSongs;
     }
 
-    public ArrayList<Integer> getRecentSongList() {
-        return listOfRecentSongs;
-    }
-
-    public void addToRecentList(int songAddress) {
-        listOfRecentSongs.add(listOfSongs.get(songAddress));
-    }
-
-    public int getSongIndex(int songAddress) {
-        return listOfSongs.indexOf(songAddress);
-    }
 }

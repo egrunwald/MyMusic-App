@@ -1,16 +1,11 @@
 package com.example.android.mymusic;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,36 +18,27 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Get recent playedList from intent when mainActivity opened from
+        // another Activity.
+        // playedList will be null when app is first opened
+        Intent intent = getIntent();
+        ArrayList<Integer> playedList = new ArrayList<Integer>();
 
-            Intent intent = getIntent();
-            ArrayList<Integer> playedList = (ArrayList<Integer>) intent.getIntegerArrayListExtra("recentPlayed");
-
-
-        // create an empty ArrayList of Song to be filled later
+        // create an empty ArrayList of Song to be filled later with song data
         ArrayList<Song> songDataList = new ArrayList<Song>();
 
-        SongList songList = new SongList();
-        ArrayList<Integer> recentSongList = songList.getRecentSongList();
-        if (playedList != null) {
-            recentSongList.addAll(playedList);
-            playedList.clear();
-        }
-
-        if (recentSongList.isEmpty()) {
-            Song thisSong = new Song(-1, "NO recent songs played", "NO recent songs played", null);
-            songDataList.add(thisSong);
-
-        } else {
+        // If intent contains a list of recentPlayed songs add them to playedList.
+        if (intent.getIntegerArrayListExtra("recentPlayed") != null) {
+            playedList.addAll(intent.getIntegerArrayListExtra("recentPlayed"));
 
             // for each song in listIfSong retrieve metadata and save as Song in songDataList
-            for (int i = recentSongList.size() - 1; i >= 0; i--) {
-                int fileAddress = recentSongList.get(i);
+            for (int i = playedList.size() - 1; i >= 0; i--) {
+                int fileAddress = playedList.get(i);
                 Uri mediaPath = Uri.parse("android.resource://" + getPackageName() + "/" + fileAddress);
                 MediaMetadataRetriever mmr = new MediaMetadataRetriever();
                 mmr.setDataSource(this, mediaPath);
@@ -69,8 +55,12 @@ public class MainActivity extends AppCompatActivity {
                 Song thisSong = new Song(fileAddress, songTitle, songArtist, albumArt);
                 songDataList.add(thisSong);
             }
-
+        } else {
+            Song thisSong = new Song(-1, "NO recent songs played", "NO recent songs played", null);
+            playedList.add(-1);
+            songDataList.add(thisSong);
         }
+
         // Create an {@link SongTextAdapter}, whose data source is a list of Strings and images. The
         // adapter knows how to create layouts for each item in the list, using the
         // list_item.xml layout resource defined in the Android framework.
@@ -89,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         // 1 argument, which is the {@link SongTextAdapter} with the variable name adapter.
         listView.setAdapter(adapter);
 
+        // Set click listener for the adapter view
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -96,10 +87,22 @@ public class MainActivity extends AppCompatActivity {
                 int songAddress = currentSong.getFileAddress();
 
                 if (songAddress != -1) {
-                Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
-                intent.putExtra("songAddress", songAddress);
-                intent.putExtra("recentPlayed", recentSongList);
-                startActivity(intent);
+
+                    // Create a new intent to open the {@link PlayerActivity}
+                    Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
+                    intent.putExtra("songAddress", songAddress);
+                    intent.putExtra("recentPlayed", playedList);
+
+                    // Start the new activity
+                    startActivity(intent);
+                }  else {
+                    Toast.makeText(MainActivity.this, "No recently played songs,\n" +
+                            "please select a song to play!", Toast.LENGTH_SHORT).show();
+                    Intent songIntent = new Intent(MainActivity.this, SongsActivity.class);
+                    songIntent.putExtra("recentPlayed", playedList);
+
+                    // Start the new activity
+                    startActivity(songIntent);
                 }
             }
         });
@@ -132,15 +135,27 @@ public class MainActivity extends AppCompatActivity {
             // The code in this method will be executed when the player_nav_text_view View is clicked on.
             @Override
             public void onClick(View view) {
-                int songAddress = songDataList.get(0).getFileAddress();
+                Song lastSongPlayed = songDataList.get(0);
+                int songAddress = lastSongPlayed.getFileAddress();
 
-                // Create a new intent to open the {@link PlayerActivity}
-                Intent playerIntent = new Intent(MainActivity.this, PlayerActivity.class);
-                intent.putExtra("songAddress", songAddress);
-                playerIntent.putExtra("recentPlayed", playedList);
+                if (songAddress != -1) {
 
-                // Start the new activity
-                startActivity(playerIntent);
+                    // Create a new intent to open the {@link PlayerActivity}
+                    Intent playerIntent = new Intent(MainActivity.this, PlayerActivity.class);
+                    playerIntent.putExtra("songAddress", songAddress);
+                    playerIntent.putExtra("recentPlayed", playedList);
+
+                    // Start the new activity
+                    startActivity(playerIntent);
+                } else {
+                    Toast.makeText(MainActivity.this, "No recently played songs,\n" +
+                            "please select a song to play!", Toast.LENGTH_SHORT).show();
+                    Intent songIntent = new Intent(MainActivity.this, SongsActivity.class);
+                    songIntent.putExtra("recentPlayed", playedList);
+
+                    // Start the new activity
+                    startActivity(songIntent);
+                }
             }
         });
 

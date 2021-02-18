@@ -10,8 +10,7 @@ public class Song {
 
     private Drawable mSongImage;
 
-    private  int mFileAddress;
-
+    private int mFileAddress;
 
     public Song(int fileAddress, String title, String artist, Drawable image) {
         mFileAddress = fileAddress;

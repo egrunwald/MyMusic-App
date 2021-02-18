@@ -1,6 +1,5 @@
 package com.example.android.mymusic;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
@@ -23,15 +22,15 @@ public class PlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player);
 
         Intent intent = getIntent();
-        int songIndex = (int)intent.getIntExtra("songAddress", -1);
-        ArrayList<Integer> playedList;
+        int songIndex = (int) intent.getIntExtra("songAddress", -1);
+        ArrayList<Integer> playedList = new ArrayList<Integer>();
+
+        // If intent contains a list of recentPlayed songs add them to playedList.
         if (intent.getIntegerArrayListExtra("recentPlayed") != null) {
-            playedList = (ArrayList<Integer>) intent.getIntegerArrayListExtra("recentPlayed");
-        } else {
-            playedList = new ArrayList<Integer>();
+            playedList.addAll(intent.getIntegerArrayListExtra("recentPlayed"));
         }
-        if(songIndex>-1) {
-            playedList.add(songIndex);
+
+        if (songIndex > -1) {
             Uri mediaPath = Uri.parse("android.resource://" + getPackageName() + "/" + songIndex);
             MediaMetadataRetriever mmr = new MediaMetadataRetriever();
             mmr.setDataSource(this, mediaPath);
@@ -63,6 +62,10 @@ public class PlayerActivity extends AppCompatActivity {
             TextView currentSongArtist = findViewById(R.id.song_playing_artist_text);
             currentSongArtist.setText("Song Artist: " + songArtist);
 
+            if (playedList.size() > 9) {
+                playedList.remove(0);
+            }
+            playedList.add(songIndex);
         }
 
         // Find the view that sets the songs list
