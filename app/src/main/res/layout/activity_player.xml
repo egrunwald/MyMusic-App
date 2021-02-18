@@ -67,33 +67,41 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/rewind_img_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/design_default_color_primary_dark"
                 android:layout_weight="1"/>
 
             <ImageView
+                android:id="@+id/stop_img_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/design_default_color_primary_dark"
                 android:layout_weight="1"/>
 
             <ImageView
+                android:id="@+id/play_pause_img_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/design_default_color_primary_dark"
                 android:layout_weight="1"/>
 
             <ImageView
+                android:id="@+id/fast_forward_img_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/design_default_color_primary_dark"
                 android:layout_weight="1"/>
 
         </LinearLayout>
 
         <SeekBar
+            android:id="@+id/playing_seek_bar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>

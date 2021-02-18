@@ -107,5 +107,18 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
+        // find ImageViews for player control buttons.
+        ImageView rewindImageView = (ImageView) findViewById(R.id.rewind_img_view);
+        ImageView stopImageView = (ImageView) findViewById(R.id.stop_img_view);
+        ImageView playPauseImageView = (ImageView) findViewById(R.id.play_pause_img_view);
+        ImageView fastForwardImageView = (ImageView) findViewById(R.id.fast_forward_img_view);
+
+        rewindImageView.setImageResource(R.drawable.rewind_icon_white);
+
+        stopImageView.setImageResource(R.drawable.stop_icon_white);
+
+        playPauseImageView.setImageResource(R.drawable.play_icon_white);
+
+        fastForwardImageView.setImageResource(R.drawable.ff_icon_white);
     }
 }
