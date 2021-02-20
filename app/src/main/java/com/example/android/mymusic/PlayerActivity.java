@@ -3,6 +3,7 @@ package com.example.android.mymusic;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +30,8 @@ public class PlayerActivity extends AppCompatActivity {
         if (intent.getIntegerArrayListExtra("recentPlayed") != null) {
             playedList.addAll(intent.getIntegerArrayListExtra("recentPlayed"));
         }
+
+        MediaPlayer mPlayer = MediaPlayer.create(this, songIndex);
 
         if (songIndex > -1) {
             Uri mediaPath = Uri.parse("android.resource://" + getPackageName() + "/" + songIndex);
@@ -113,12 +116,71 @@ public class PlayerActivity extends AppCompatActivity {
         ImageView playPauseImageView = (ImageView) findViewById(R.id.play_pause_img_view);
         ImageView fastForwardImageView = (ImageView) findViewById(R.id.fast_forward_img_view);
 
+        // Set player control buttons to there default images
         rewindImageView.setImageResource(R.drawable.rewind_icon_white);
-
         stopImageView.setImageResource(R.drawable.stop_icon_white);
-
         playPauseImageView.setImageResource(R.drawable.play_icon_white);
-
         fastForwardImageView.setImageResource(R.drawable.ff_icon_white);
+
+        int startPosition = mPlayer.getCurrentPosition();
+        int endPosition = mPlayer.getDuration();
+
+        if (songIndex > -1) {
+            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.pause();
+                    playPauseImageView.setImageResource(R.drawable.play_icon_white);
+                    mp.seekTo(startPosition);
+                }
+            });
+            playPauseImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!mPlayer.isPlaying()) {
+                        playPauseImageView.setImageResource(R.drawable.pause_icon_white);
+                        mPlayer.start();
+                    } else {
+                        playPauseImageView.setImageResource(R.drawable.play_icon_white);
+                        mPlayer.pause();
+                    }
+                }
+            });
+
+            stopImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mPlayer.isPlaying()) {
+                        mPlayer.pause();
+                        playPauseImageView.setImageResource(R.drawable.play_icon_white);
+                        mPlayer.seekTo(startPosition);
+                    }
+                }
+            });
+
+            rewindImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mPlayer.isPlaying()) {
+                        int currentPosition = mPlayer.getCurrentPosition();
+                        if (currentPosition >= 5000) {
+                            mPlayer.seekTo(currentPosition - 5000);
+                        }
+                    }
+                }
+            });
+
+            fastForwardImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mPlayer.isPlaying()) {
+                        int currentPosition = mPlayer.getCurrentPosition();
+                        if (currentPosition <= endPosition - 5000) {
+                            mPlayer.seekTo(currentPosition + 5000);
+                        }
+                    }
+                }
+            });
+        }
     }
 }
