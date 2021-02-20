@@ -3,12 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey_400"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_margin="8dp"
         android:id="@+id/navigation_bar">
 
         <TextView
@@ -16,18 +18,23 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/recent_nav_text_view"
+            android:theme="@style/Theme.HeaderButtonDefaultTheme"
             android:text="Recent Songs"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
             android:id="@+id/songs_nav_text_view"
+            android:theme="@style/Theme.HeaderButtonSelectedTheme"
             android:text="All Songs"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/player_nav_text_view"
+            android:theme="@style/Theme.HeaderButtonDefaultTheme"
             android:text="Player"/>
     </LinearLayout>
 
@@ -35,6 +42,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:dividerHeight="8dp"
+        android:layout_margin="8dp"
         android:id="@+id/songs_list"/>
 
 </LinearLayout>

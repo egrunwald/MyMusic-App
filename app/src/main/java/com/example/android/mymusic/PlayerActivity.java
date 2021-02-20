@@ -21,6 +21,17 @@ public class PlayerActivity extends AppCompatActivity {
     MediaPlayer mPlayer = new MediaPlayer();
     SeekBar currentSongSeekBar;
     Handler seekBarHandler = new Handler();
+    private Runnable moveSeekBar = new Runnable() {
+        public void run() {
+            if (mPlayer.isPlaying()) {
+                int mediaPos_new = mPlayer.getCurrentPosition();
+                int mediaMax_new = mPlayer.getDuration();
+                currentSongSeekBar.setMax(mediaMax_new);
+                currentSongSeekBar.setProgress(mediaPos_new);
+                seekBarHandler.postDelayed(this, 100); //Looping the thread after 0.1 second
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,16 +225,4 @@ public class PlayerActivity extends AppCompatActivity {
             });
         }
     }
-
-    private Runnable moveSeekBar = new Runnable() {
-        public void run() {
-            if (mPlayer.isPlaying()) {
-                int mediaPos_new = mPlayer.getCurrentPosition();
-                int mediaMax_new = mPlayer.getDuration();
-                currentSongSeekBar.setMax(mediaMax_new);
-                currentSongSeekBar.setProgress(mediaPos_new);
-                seekBarHandler.postDelayed(this, 100); //Looping the thread after 0.1 second
-            }
-        }
-    };
 }
