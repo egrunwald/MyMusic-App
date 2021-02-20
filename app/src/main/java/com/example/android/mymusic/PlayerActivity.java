@@ -6,8 +6,10 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,9 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 
 public class PlayerActivity extends AppCompatActivity {
+    MediaPlayer mPlayer = new MediaPlayer();
+    SeekBar currentSongSeekBar;
+    Handler seekBarHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +36,7 @@ public class PlayerActivity extends AppCompatActivity {
             playedList.addAll(intent.getIntegerArrayListExtra("recentPlayed"));
         }
 
-        MediaPlayer mPlayer = MediaPlayer.create(this, songIndex);
+        mPlayer = MediaPlayer.create(this, songIndex);
 
         if (songIndex > -1) {
             Uri mediaPath = Uri.parse("android.resource://" + getPackageName() + "/" + songIndex);
@@ -125,6 +130,10 @@ public class PlayerActivity extends AppCompatActivity {
         int startPosition = mPlayer.getCurrentPosition();
         int endPosition = mPlayer.getDuration();
 
+        currentSongSeekBar = (SeekBar) findViewById(R.id.playing_seek_bar);
+        currentSongSeekBar.setMax(endPosition);
+        currentSongSeekBar.setProgress(startPosition);
+
         if (songIndex > -1) {
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
@@ -132,6 +141,7 @@ public class PlayerActivity extends AppCompatActivity {
                     mp.pause();
                     playPauseImageView.setImageResource(R.drawable.play_icon_white);
                     mp.seekTo(startPosition);
+                    currentSongSeekBar.setProgress(startPosition);
                 }
             });
             playPauseImageView.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +150,7 @@ public class PlayerActivity extends AppCompatActivity {
                     if (!mPlayer.isPlaying()) {
                         playPauseImageView.setImageResource(R.drawable.pause_icon_white);
                         mPlayer.start();
+                        seekBarHandler.postDelayed(moveSeekBar, 100);
                     } else {
                         playPauseImageView.setImageResource(R.drawable.play_icon_white);
                         mPlayer.pause();
@@ -150,11 +161,11 @@ public class PlayerActivity extends AppCompatActivity {
             stopImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mPlayer.isPlaying()) {
-                        mPlayer.pause();
-                        playPauseImageView.setImageResource(R.drawable.play_icon_white);
-                        mPlayer.seekTo(startPosition);
-                    }
+                    mPlayer.pause();
+                    playPauseImageView.setImageResource(R.drawable.play_icon_white);
+                    mPlayer.seekTo(startPosition);
+                    currentSongSeekBar.setProgress(startPosition);
+
                 }
             });
 
@@ -181,6 +192,38 @@ public class PlayerActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            currentSongSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser) {
+                        mPlayer.seekTo(progress);
+                        currentSongSeekBar.setProgress(progress);
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
         }
     }
+
+    private Runnable moveSeekBar = new Runnable() {
+        public void run() {
+            if (mPlayer.isPlaying()) {
+                int mediaPos_new = mPlayer.getCurrentPosition();
+                int mediaMax_new = mPlayer.getDuration();
+                currentSongSeekBar.setMax(mediaMax_new);
+                currentSongSeekBar.setProgress(mediaPos_new);
+                seekBarHandler.postDelayed(this, 100); //Looping the thread after 0.1 second
+            }
+        }
+    };
 }
