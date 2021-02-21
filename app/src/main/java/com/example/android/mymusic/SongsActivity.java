@@ -1,10 +1,12 @@
 package com.example.android.mymusic;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -21,6 +23,18 @@ public class SongsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_songs);
+
+        //Find the view that sets the recent nav button.
+        TextView recentTextView = (TextView) findViewById(R.id.recent_nav_text_view);
+        recentTextView.setText(R.string.header_recent);
+
+        // Find the view that sets the songs list nav button
+        TextView songsTextView = (TextView) findViewById(R.id.songs_nav_text_view);
+        songsTextView.setText(R.string.header_all);
+
+        // Find the view that sets the audio player nav button
+        TextView playerTextView = (TextView) findViewById(R.id.player_nav_text_view);
+        playerTextView.setText(R.string.header_player);
 
         // Create empty ArrayList to fill with played songs list.
         ArrayList<Integer> playedList  = new ArrayList<Integer>();
@@ -95,11 +109,9 @@ public class SongsActivity extends AppCompatActivity {
             }
         });
 
-        // Find the view that sets the songs list
-        TextView recentSongs = (TextView) findViewById(R.id.recent_nav_text_view);
 
         // Set the on click listener for the view
-        recentSongs.setOnClickListener(new View.OnClickListener() {
+        recentTextView.setOnClickListener(new View.OnClickListener() {
 
             // The code in this method will be executed when the songs_nav_text_view View is clicked on.
             @Override
@@ -116,11 +128,9 @@ public class SongsActivity extends AppCompatActivity {
             }
         });
 
-        // Find the view that sets the audio player
-        TextView player = (TextView) findViewById(R.id.player_nav_text_view);
 
         // Set the on click listener for the view
-        player.setOnClickListener(new View.OnClickListener() {
+        playerTextView.setOnClickListener(new View.OnClickListener() {
 
             // The code in this method will be executed when the player_nav_text_view View is clicked on.
             @Override
@@ -136,8 +146,9 @@ public class SongsActivity extends AppCompatActivity {
                     // Start the new activity
                     startActivity(playerIntent);
                 } else {
-                    Toast.makeText(SongsActivity.this, "No recently played songs,\n" +
-                            "please select a song to play!", Toast.LENGTH_SHORT).show();
+                    Toast toast = Toast.makeText(SongsActivity.this, getText(R.string.no_recent_toast), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
             }
         });

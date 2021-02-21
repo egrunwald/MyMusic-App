@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -23,17 +24,32 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Find the view that sets the recent nav button and Set text.
+        TextView recentTextView = (TextView) findViewById(R.id.recent_nav_text_view);
+        recentTextView.setText(R.string.header_recent);
+
+        // Find the view that sets the songs list nav button and Set text.
+        TextView songsTextView = (TextView) findViewById(R.id.songs_nav_text_view);
+        songsTextView.setText(R.string.header_all);
+
+        // Find the view that sets the audio player nav button and Set text.
+        TextView playerTextView = (TextView) findViewById(R.id.player_nav_text_view);
+        playerTextView.setText(R.string.header_player);
+
         // Get recent playedList from intent when mainActivity opened from
         // another Activity.
-        // playedList will be null when app is first opened
         Intent intent = getIntent();
-        ArrayList<Integer> playedList = new ArrayList<Integer>();
 
-        // create an empty ArrayList of Song to be filled later with song data
-        ArrayList<Song> songDataList = new ArrayList<Song>();
+        // Create an empty ArrayList of Integer to be filled from intent extra
+        ArrayList<Integer> playedList = new ArrayList<>();
 
-        // If intent contains a list of recentPlayed songs add them to playedList.
+        // Create an empty ArrayList of Song to be filled later with song data
+        ArrayList<Song> songDataList = new ArrayList<>();
+
+        // Check if Intent contains extra "recentPlayed"
         if (intent.getIntegerArrayListExtra("recentPlayed") != null) {
+
+            // If intent contains a list of recentPlayed songs add them to playedList.
             playedList.addAll(intent.getIntegerArrayListExtra("recentPlayed"));
 
             // for each song in listIfSong retrieve metadata and save as Song in songDataList
@@ -56,8 +72,13 @@ public class MainActivity extends AppCompatActivity {
                 songDataList.add(thisSong);
             }
         } else {
-            Song thisSong = new Song(-1, "NO recent songs played", "NO recent songs played", null);
-            playedList.add(-1);
+            // If intent does not contain a list of recentPlayed songs add blank song to playedList.
+            Song thisSong = new Song(-1, getString(R.string.no_recent), getString(R.string.no_recent), null);
+
+            // Add the blank song address to the playedList to pass to other activities
+            playedList.add(thisSong.getFileAddress());
+
+            // Add the blank song to the songDataList to display
             songDataList.add(thisSong);
         }
 
@@ -96,8 +117,9 @@ public class MainActivity extends AppCompatActivity {
                     // Start the new activity
                     startActivity(intent);
                 }  else {
-                    Toast.makeText(MainActivity.this, "No recently played songs,\n" +
-                            "please select a song to play!", Toast.LENGTH_SHORT).show();
+                    Toast toast = Toast.makeText(MainActivity.this, getText(R.string.no_recent_toast), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                     Intent songIntent = new Intent(MainActivity.this, SongsActivity.class);
                     songIntent.putExtra("recentPlayed", playedList);
 
@@ -107,11 +129,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Find the view that sets the songs list
-        TextView songsList = (TextView) findViewById(R.id.songs_nav_text_view);
+
 
         // Set the on click listener for the view
-        songsList.setOnClickListener(new View.OnClickListener() {
+        songsTextView.setOnClickListener(new View.OnClickListener() {
 
             // The code in this method will be executed when the songs_nav_text_view View is clicked on.
             @Override
@@ -126,11 +147,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Find the view that sets the audio player
-        TextView player = (TextView) findViewById(R.id.player_nav_text_view);
+
 
         // Set the on click listener for the view
-        player.setOnClickListener(new View.OnClickListener() {
+        playerTextView.setOnClickListener(new View.OnClickListener() {
 
             // The code in this method will be executed when the player_nav_text_view View is clicked on.
             @Override
@@ -148,8 +168,9 @@ public class MainActivity extends AppCompatActivity {
                     // Start the new activity
                     startActivity(playerIntent);
                 } else {
-                    Toast.makeText(MainActivity.this, "No recently played songs,\n" +
-                            "please select a song to play!", Toast.LENGTH_SHORT).show();
+                    Toast toast = Toast.makeText(MainActivity.this, getText(R.string.no_recent_toast), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                     Intent songIntent = new Intent(MainActivity.this, SongsActivity.class);
                     songIntent.putExtra("recentPlayed", playedList);
 

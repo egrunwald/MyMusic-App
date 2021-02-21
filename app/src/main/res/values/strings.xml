@@ -4,5 +4,6 @@
     <string name="header_all">All Songs</string>
     <string name="header_player">Player</string>
     <string name="no_recent">NO recent songs played!</string>
+    <string name="no_recent_toast">No recently played songs,\nplease select a song to play!</string>
 
 </resources>
