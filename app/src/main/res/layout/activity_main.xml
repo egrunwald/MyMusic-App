@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,8 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/recent_nav_text_view"
-            android:theme="@style/Theme.HeaderButtonSelectedTheme"
-            android:text="Recent Songs"/>
+            android:theme="@style/Theme.HeaderButtonSelectedTheme" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -30,15 +28,13 @@
             android:id="@+id/songs_nav_text_view"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:theme="@style/Theme.HeaderButtonDefaultTheme"
-            android:text="All Songs"/>
+            android:theme="@style/Theme.HeaderButtonDefaultTheme" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/player_nav_text_view"
-            android:theme="@style/Theme.HeaderButtonDefaultTheme"
-            android:text="Player"/>
+            android:theme="@style/Theme.HeaderButtonDefaultTheme" />
     </LinearLayout>
 
     <ListView

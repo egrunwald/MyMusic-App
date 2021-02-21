@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MyMusic</string>
+    <string name="header_recent">Recent</string>
+    <string name="header_all">All Songs</string>
+    <string name="header_player">Player</string>
+    <string name="no_recent">NO recent songs played!</string>
+
 </resources>
