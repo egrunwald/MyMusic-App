@@ -207,10 +207,10 @@ public class PlayerActivity extends AppCompatActivity {
         ImageView fastForwardImageView = (ImageView) findViewById(R.id.fast_forward_img_view);
 
         // Set player control buttons to there default images
-        rewindImageView.setImageResource(R.drawable.rewind_icon_white);
-        stopImageView.setImageResource(R.drawable.stop_icon_white);
-        playPauseImageView.setImageResource(R.drawable.play_icon_white);
-        fastForwardImageView.setImageResource(R.drawable.ff_icon_white);
+        rewindImageView.setImageResource(R.drawable.rewind_icon_black);
+        stopImageView.setImageResource(R.drawable.stop_icon_black);
+        playPauseImageView.setImageResource(R.drawable.play_icon_black);
+        fastForwardImageView.setImageResource(R.drawable.ff_icon_black);
 
         // Set start time value of current song
         int startPosition = mPlayer.getCurrentPosition();
@@ -236,7 +236,7 @@ public class PlayerActivity extends AppCompatActivity {
                 mp.pause();
 
                 // Change the Play/Pause Image to a play Button
-                playPauseImageView.setImageResource(R.drawable.play_icon_white);
+                playPauseImageView.setImageResource(R.drawable.play_icon_black);
 
                 // Set media player to start of song
                 mp.seekTo(startPosition);
@@ -255,7 +255,7 @@ public class PlayerActivity extends AppCompatActivity {
                 if (!mPlayer.isPlaying()) {
 
                     // Change the image from a play image to a pause image
-                    playPauseImageView.setImageResource(R.drawable.pause_icon_white);
+                    playPauseImageView.setImageResource(R.drawable.pause_icon_black);
 
                     // Start the song
                     mPlayer.start();
@@ -265,7 +265,7 @@ public class PlayerActivity extends AppCompatActivity {
                 } else {
 
                     // Change the pause image to the play image
-                    playPauseImageView.setImageResource(R.drawable.play_icon_white);
+                    playPauseImageView.setImageResource(R.drawable.play_icon_black);
 
                     // Pause the song
                     mPlayer.pause();
@@ -282,7 +282,7 @@ public class PlayerActivity extends AppCompatActivity {
                 mPlayer.pause();
 
                 // Change the play/pause image to the play image
-                playPauseImageView.setImageResource(R.drawable.play_icon_white);
+                playPauseImageView.setImageResource(R.drawable.play_icon_black);
 
                 // Set media player to the start of the song
                 mPlayer.seekTo(startPosition);
