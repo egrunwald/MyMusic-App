@@ -1,6 +1,5 @@
 package com.example.android.mymusic;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
