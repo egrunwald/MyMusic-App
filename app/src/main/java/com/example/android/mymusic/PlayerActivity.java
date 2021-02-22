@@ -18,15 +18,21 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 
 public class PlayerActivity extends AppCompatActivity {
+
+    // Create new empty MediaPlayer called mPlayer
     MediaPlayer mPlayer = new MediaPlayer();
+
+    // Create new seekBar called currentSongSeekBar
     SeekBar currentSongSeekBar;
+
+    // Create Handler called seekBarHandler
     Handler seekBarHandler = new Handler();
 
     /**
      * This is a runnable method for the media handler to check and update
      * the seek bar position every 0.1 seconds when a song is playing.
      */
-    private Runnable moveSeekBar = new Runnable() {
+    private final Runnable moveSeekBar = new Runnable() {
         public void run() {
 
             // check if a song is playing
@@ -74,7 +80,7 @@ public class PlayerActivity extends AppCompatActivity {
         int songIndex = (int) intent.getIntExtra("songAddress", -1);
 
         // Create an empty ArrayList of Integer to be filled from intent extra
-        ArrayList<Integer> playedList = new ArrayList<Integer>();
+        ArrayList<Integer> playedList = new ArrayList<>();
 
         // Check if Intent contains extra "recentPlayed"
         if (intent.getIntegerArrayListExtra("recentPlayed") != null) {
@@ -138,15 +144,18 @@ public class PlayerActivity extends AppCompatActivity {
 
         // Find view that sets the song title text
         TextView currentSongTitle = findViewById(R.id.song_playing_title_text);
-        currentSongTitle.setText("Song Title: " + songTitle);
+        String songTitleDisplay = "Song Title: " + songTitle;
+        currentSongTitle.setText(songTitleDisplay);
 
         // Find view that sets the song album text
         TextView currentSongAlbum = findViewById(R.id.song_playing_album_text);
-        currentSongAlbum.setText("Album: " + songAlbum);
+        String songAlbumDisplay = "Album: " + songAlbum;
+        currentSongAlbum.setText(songAlbumDisplay);
 
         // Find view that sets the song artist text
         TextView currentSongArtist = findViewById(R.id.song_playing_artist_text);
-        currentSongArtist.setText("Song Artist: " + songArtist);
+        String songArtistDisplay = "Song Artist: " + songArtist;
+        currentSongArtist.setText(songArtistDisplay);
 
         // Check size of played list
         if (playedList.size() > 9) {
@@ -356,6 +365,5 @@ public class PlayerActivity extends AppCompatActivity {
                 // to be added in future updates
             }
         });
-
     }
 }

@@ -2,14 +2,12 @@ package com.example.android.mymusic;
 
 import android.graphics.drawable.Drawable;
 
+// New class to hold and return the metadata for a song 
 public class Song {
 
     private String mSongArtistInfo;
-
     private String mSongTitleInfo;
-
     private Drawable mSongImage;
-
     private int mFileAddress;
 
     public Song(int fileAddress, String title, String artist, Drawable image) {
@@ -30,7 +28,6 @@ public class Song {
         if (image != null) {
             mSongImage = image;
         }
-
     }
 
     public String getSongTitle() {
@@ -52,5 +49,4 @@ public class Song {
     public int getFileAddress() {
         return mFileAddress;
     }
-
 }
