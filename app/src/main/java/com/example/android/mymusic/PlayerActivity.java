@@ -298,17 +298,37 @@ public class PlayerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // Check if song is playing
-                if (mPlayer.isPlaying()) {
+                // Get the current position of the song
+                int currentPosition = mPlayer.getCurrentPosition();
 
-                    // Get the current position of the song
-                    int currentPosition = mPlayer.getCurrentPosition();
+                // Get new song position
+                int newPosition = currentPosition - 5000;
 
-                    // Check if rewind is within the song limits
-                    if (currentPosition >= 5000) {
+                // Set song limit for rewind
+                int rewindLimit = 5000;
 
-                        // Set media player position back 5000ms
-                        mPlayer.seekTo(currentPosition - 5000);
+                // Check if rewind is within the song limits
+                if (currentPosition >= rewindLimit) {
+
+                    // Set media player position back 5000ms
+                    mPlayer.seekTo(currentPosition - 5000);
+
+                    // Check if song is playing
+                    if (!mPlayer.isPlaying()) {
+
+                        // Set seekBar progress back 5000ms
+                        currentSongSeekBar.setProgress(newPosition);
+                    }
+                } else {
+
+                    // Set the media player back to start of song
+                    mPlayer.seekTo(startPosition);
+
+                    // Check if song is playing
+                    if (!mPlayer.isPlaying()) {
+
+                        // Set seekBar progress back to start of song
+                        currentSongSeekBar.setProgress(startPosition);
                     }
                 }
             }
@@ -319,21 +339,37 @@ public class PlayerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // Check if song is playing
-                if (mPlayer.isPlaying()) {
+                // Get the current position of the song
+                int currentPosition = mPlayer.getCurrentPosition();
 
-                    // Get the current position of the song
-                    int currentPosition = mPlayer.getCurrentPosition();
+                // Get new song position
+                int newPosition = currentPosition + 5000;
 
-                    // Check if fast forward is within the song limits
-                    if (currentPosition <= endPosition - 5000) {
+                // Get song limit for fast forward
+                int fastforwardLimit = endPosition - 5000;
 
-                        // Set the media player ahead 5000ms
-                        mPlayer.seekTo(currentPosition + 5000);
-                    } else {
+                // Check if fast forward is within the song limits
+                if (currentPosition <= fastforwardLimit) {
 
-                        // Set media player to the end of song
-                        mPlayer.seekTo(endPosition);
+                    // Set the media player ahead 5000ms
+                    mPlayer.seekTo(newPosition);
+
+                    // Check if song is playing
+                    if (!mPlayer.isPlaying()) {
+
+                        // Set seekBar progress ahead 5000ms
+                        currentSongSeekBar.setProgress(newPosition);
+                    }
+                } else {
+
+                    // Set media player to the end of song
+                    mPlayer.seekTo(endPosition);
+
+                    // Check if song is playing
+                    if (!mPlayer.isPlaying()) {
+
+                        // Set seekBar progress to end of song
+                        currentSongSeekBar.setProgress(endPosition);
                     }
                 }
             }
