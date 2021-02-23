@@ -15,22 +15,22 @@
     </style>
 
     <!-- Custom application theme. -->
-    <style name="Theme.MyMusicCustom" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.MyMusicCustom" parent="Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/green_400</item>
         <item name="colorPrimaryVariant">@color/green_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
     </style>
 
     <!-- Custom theme for list items. -->
-    <style name="Theme.ListItem" parent="Theme.MaterialComponents">
+    <style name="Theme.MyMusic.ListItem"  parent="Theme.MaterialComponents">
         <item name="android:background">@color/green_400</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <!-- Custom theme for default header button. -->
-    <style name="Theme.HeaderButtonDefaultTheme" parent="Theme.MaterialComponents">
+    <style name="Theme.MyMusic.HeaderButtonDefaultTheme" parent="Theme.MaterialComponents">
         <item name="android:layout_margin">8dp</item>
         <item name="android:padding">8dp</item>
         <item name="android:textSize">16sp</item>
@@ -40,7 +40,7 @@
     </style>
 
     <!-- Custom theme for currently selected header button. -->
-    <style name="Theme.HeaderButtonSelectedTheme" parent="Theme.MaterialComponents">
+    <style name="Theme.MyMusic.HeaderButtonSelectedTheme" parent="Theme.MaterialComponents">
         <item name="android:layout_margin">8dp</item>
         <item name="android:padding">8dp</item>
         <item name="android:textSize">16sp</item>
@@ -50,7 +50,7 @@
     </style>
 
     <!-- Custom theme for song info display in the player. -->
-    <style name="Theme.SongInfoTheme" parent="Theme.MaterialComponents">
+    <style name="Theme.MyMusic.SongInfoTheme" parent="Theme.MaterialComponents">
         <item name="android:gravity">center_horizontal</item>
         <item name="android:textSize">12dp</item>
         <item name="android:textStyle">bold</item>
@@ -58,7 +58,7 @@
     </style>
 
     <!-- Custom theme for the player control buttons. -->
-    <style name="Theme.PlayerButtonTheme" parent="Theme.MaterialComponents">
+    <style name="Theme.MyMusic.PlayerButtonTheme" parent="Theme.MaterialComponents">
         <item name="android:background">@color/green_400</item>
         <item name="android:padding">8dp</item>
     </style>

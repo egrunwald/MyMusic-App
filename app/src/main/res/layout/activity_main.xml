@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:theme="@style/Theme.HeaderButtonSelectedTheme" />
+            android:theme="@style/Theme.MyMusic.HeaderButtonSelectedTheme" />
 
         <TextView
             android:id="@+id/songs_nav_text_view"
@@ -28,14 +28,14 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:layout_weight="1"
-            android:theme="@style/Theme.HeaderButtonDefaultTheme" />
+            android:theme="@style/Theme.MyMusic.HeaderButtonDefaultTheme" />
 
         <TextView
             android:id="@+id/player_nav_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:theme="@style/Theme.HeaderButtonDefaultTheme" />
+            android:theme="@style/Theme.MyMusic.HeaderButtonDefaultTheme" />
     </LinearLayout>
 
     <ListView

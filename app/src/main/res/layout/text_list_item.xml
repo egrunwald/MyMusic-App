@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:theme="@style/Theme.ListItem">
+    android:theme="@style/Theme.MyMusic.ListItem">
 
     <ImageView
         android:id="@+id/song_image_view"
