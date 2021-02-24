@@ -52,7 +52,7 @@
     <!-- Custom theme for song info display in the player. -->
     <style name="Theme.MyMusic.SongInfoTheme" parent="Theme.MaterialComponents">
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/black</item>
     </style>
