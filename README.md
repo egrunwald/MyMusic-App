@@ -1,2 +1,2 @@
 # MyMusic-App
-Udacity Android Basics Nano Degree Music app project
+_Udacity_ **Android Basics Nano Degree**: Music app project
